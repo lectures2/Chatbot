@@ -1,0 +1,116 @@
+<!-- history.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"> <!-- Add your stylesheets if any -->
+
+    <title>Chat History</title>
+    <!-- Add any necessary CSS or external libraries here -->
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5; /* Light gray background color */
+            color: #333; /* Dark text color */
+        }
+
+        nav {
+            background: #0D47A1; /* Dark blue navigation background color */
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #1565C0; /* Lighter blue on hover */
+        }
+
+        section {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #0D47A1; /* Dark blue heading color */
+        }
+
+        /* Chat history styles */
+        #chat-history-container {
+            max-height: 300px;
+            overflow: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #chat-history-container div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Chat History</h2>
+
+        <!-- Chat history container -->
+        <div id="chat-history-container"></div>
+    </section>
+
+      <script>
+        // JavaScript code to load and display chat history
+        document.addEventListener("DOMContentLoaded", function () {
+            // Load chat history from localStorage
+            const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+            // Display chat history
+            const chatHistoryContainer = document.getElementById("chat-history-container");
+            chatHistory.forEach(message => {
+                const messageElement = document.createElement("div");
+                messageElement.innerText = `${message.sender}: ${message.message}`;
+                chatHistoryContainer.appendChild(messageElement);
+            });
+        });
+    </script>
+</body>
+
+</html>

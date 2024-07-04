@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Language Academy</title>
+  <style>
+    /* Add your CSS styling here */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2196F3; /* Blue background color */
+      color: #fff; /* White text color */
+    }
+
+    header {
+      background-image: url(360_F_239399223_tthRTvt26El5ccmyQIck9ySsHKgX5YBo.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    header:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+
+    .header-box {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin-top: 50px;
+    }
+
+    .watch-video-button {
+      display: inline-block;
+      background-color: #0D47A1; /* Dark blue button color */
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .watch-video-button:hover {
+      background-color: #1565C0; /* Lighter blue on hover */
+    }
+
+    nav {
+      background: #0D47A1; /* Dark blue navigation background color */
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: space-around;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin: 0 10px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: #1565C0; /* Lighter blue on hover */
+    }
+
+    /* Introduction section */
+    section {
+      background-color: #ffffff;
+      color: #444;
+      padding: 50px;
+      text-align: center;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #0D47A1; /* Dark blue heading color */
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 560px;
+      height: 315px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="apply.html">Apply Now</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="contact.html">Contact Us </a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <div class="header-box">
+      <h1>Welcome to our Language Academy</h1>
+      <a href="#featured-video" class="watch-video-button">Watch our intro video</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>About Us</h2>
+    <p>
+      At our Language School, we are dedicated to providing high-quality language education to students of all levels.
+      Whether you are a beginner or an advanced learner, our experienced instructors will guide you on your language
+      learning journey. We offer a variety of courses tailored to meet your specific needs and help you achieve your
+      language goals. Join us today and embark on an exciting language learning adventure!
+    </p>
+  </section>
+
+  <section id="featured-video">
+    <h2>Featured Video</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/YdjO0UrrNZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </section>
+
+  <script>
+    document.querySelector(".watch-video-button").addEventListener("click", function (event) {
+      event.preventDefault();
+      const featuredVideoSection = document.getElementById("featured-video");
+      const scrollOptions = {
+        behavior: "smooth"
+      };
+      featuredVideoSection.scrollIntoView(scrollOptions);
+    });
+  </script>
+</body>
+
+</html>

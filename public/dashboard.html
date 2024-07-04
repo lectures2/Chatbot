@@ -1,0 +1,275 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"> <!-- Add your stylesheets if any -->
+    <script src="https://unpkg.com/spacy-js"></script>
+
+    <title>Dashboard</title>
+    <!-- Add any necessary CSS or external libraries here -->
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5; /* Light gray background color */
+            color: #333; /* Dark text color */
+        }
+
+        nav {
+            background: #0D47A1; /* Dark blue navigation background color */
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #1565C0; /* Lighter blue on hover */
+        }
+
+        section {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #0D47A1; /* Dark blue heading color */
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Chatbot styles */
+        #chat-container {
+            height: 300px;
+            overflow: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        #send-button {
+            background-color: #0D47A1; /* Dark blue button color */
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Welcome to Your Dashboard</h2>
+        <p>This is a secure area. Only authenticated users can access the dashboard.</p>
+
+        <!-- Chatbot container -->
+        <div id="chat-container"></div>
+
+        <!-- User input field -->
+        <input type="text" id="user-input" placeholder="Type your message">
+
+        <!-- Send button -->
+        <button id="send-button" onclick="sendMessage()">Send</button>
+    </section>
+
+    <script>
+        // JavaScript for handling chatbot messages and saving chat history
+        document.addEventListener("DOMContentLoaded", function () {
+            // Load chat history from local storage on page load
+            loadChatHistory();
+        });
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input");
+
+            // Get user input
+            const userMessage = userInput.value.trim();
+
+            if (userMessage === "") {
+                return; // Do not send empty messages
+            }
+
+            // Display user message in the chat container
+            displayMessage("You", userMessage, "user");
+
+            // Save user message to local storage
+            saveMessageToLocalstorage("You", userMessage);
+
+            // Send user message to the server for chatbot response
+            sendUserMessageToServer(userMessage);
+
+            // Clear the input field
+            userInput.value = "";
+        }
+
+        function displayMessage(sender, message, messageType) {
+            const chatContainer = document.getElementById("chat-container");
+
+            // Create a new message element
+            const messageElement = document.createElement("div");
+
+            // Apply styles based on the message type
+            if (messageType === "user") {
+                messageElement.style.backgroundColor = "#0D47A1"; // Dark blue background for user messages
+                messageElement.style.color = "#fff";
+            } else {
+                messageElement.style.backgroundColor = "#eee"; // Light gray background for chatbot messages
+                messageElement.style.color = "#333";
+            }
+
+            // Set message text and sender
+            messageElement.innerText = `${sender}: ${message}`;
+
+            // Append the message element to the chat container
+            chatContainer.appendChild(messageElement);
+
+            // Scroll to the bottom of the chat container
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendUserMessageToServer(userMessage) {
+            // Send an HTTP request to the server to get the chatbot response
+            fetch('/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const chatbotResponse = data.message;
+
+                // Display chatbot response in the chat container
+                displayMessage("Chatbot", chatbotResponse, "chatbot");
+
+                // Save the chat history to local storage
+                saveMessageToLocalstorage("Chatbot", chatbotResponse);
+            })
+            .catch((error) => {
+                console.error('Error sending message to the server:', error);
+            });
+        }
+
+        function saveMessageToLocalstorage(sender, message) {
+            // Load existing chat history from local storage
+            const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+            // Add the new message to the chat history
+            chatHistory.push({ sender, message });
+
+            // Save the updated chat history to local storage
+            localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+        }
+
+        function loadChatHistory() {
+            // Load chat history from local storage
+            const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+            // Display each message in the chat container
+            for (const entry of chatHistory) {
+                displayMessage(entry.sender, entry.message, entry.sender.toLowerCase());
+            }
+        }
+    </script>
+
+<script>
+        // Include your existing code here
+
+        // NLP Techniques using spaCy.js
+        function executeNLP(text) {
+            // Tokenization
+            const tokens = spacy.tokenize(text);
+            console.log("Tokens:", tokens);
+
+            // Part-of-speech tagging
+            const posTags = spacy.posTag(text);
+            console.log("Part-of-speech tags:", posTags);
+
+            // Syntactic parsing (spaCy.js doesn't provide syntactic parsing directly in the browser)
+            // Replace with the appropriate library or server-side processing if needed
+
+            // Named Entity Recognition (NER)
+            const entities = spacy.ner(text);
+            console.log("Named entities:", entities);
+        }
+
+        // Function to load chat history and execute NLP techniques
+        function loadChatHistory() {
+            // Load chat history from the server
+            fetch('/load-chat-history')
+                .then(response => response.json())
+                .then(data => {
+                    const chatHistory = data.chatHistory || [];
+
+                    // Display each message in the chat container
+                    for (const entry of chatHistory) {
+                        displayMessage(entry.sender, entry.message, entry.sender.toLowerCase());
+                    }
+
+                    // Sample text for NLP techniques
+                    const sampleText = "Tokenization is a crucial step in NLP.";
+
+                    // Execute NLP techniques on the sample text
+                    executeNLP(sampleText);
+                })
+                .catch((error) => {
+                    console.error('Error loading chat history from the server:', error);
+                });
+        }
+    </script>
+
+</body>
+
+</html>
